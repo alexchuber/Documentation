@@ -6,6 +6,7 @@ keywords: diving deeper, import, importing assets, asset, importing
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 # Importing Assets

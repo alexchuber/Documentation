@@ -6,6 +6,7 @@ keywords: diving deeper, phyiscs
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 # Support for Physics Engines

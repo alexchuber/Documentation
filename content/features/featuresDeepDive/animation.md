@@ -6,6 +6,7 @@ keywords: diving deeper, animation
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Animation

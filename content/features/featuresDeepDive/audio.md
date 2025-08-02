@@ -6,6 +6,7 @@ keywords: diving deeper, sound, audio, sound engine, audio engine
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 The Babylon.js audio engines are based on the [**Web Audio specification**](https://webaudio.github.io/web-audio-api/). They  feature ambient, spatialized and directional sounds, as well as basic audio buses for signal routing and mixing.

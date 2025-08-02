@@ -6,6 +6,7 @@ keywords: diving deeper, events, event handling
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Event Handling

@@ -6,6 +6,7 @@ keywords: diving deeper, cameras, intro
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Cameras

@@ -6,6 +6,7 @@ keywords: diving deeper, environment
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Realistic Environments

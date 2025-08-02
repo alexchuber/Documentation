@@ -6,6 +6,7 @@ keywords: diving deeper, materials, meshes, creation, mesh creation
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## The Creation of Different Types of Mesh

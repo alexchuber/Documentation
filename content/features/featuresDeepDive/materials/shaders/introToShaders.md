@@ -6,6 +6,7 @@ keywords: babylon.js, advanced, shaders
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Introduction to Shaders in Babylon.js

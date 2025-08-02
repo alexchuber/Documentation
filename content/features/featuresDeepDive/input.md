@@ -6,6 +6,7 @@ keywords: diving deeper, input
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 # Inputs

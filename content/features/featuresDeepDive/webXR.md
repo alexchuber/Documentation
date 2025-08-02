@@ -6,6 +6,7 @@ keywords: babylon.js, diving deeper, WebXR, VR, AR
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 # WebXR

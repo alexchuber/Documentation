@@ -6,6 +6,7 @@ keywords: diving deeper, lights, shadows, intro
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Lights and Shadows

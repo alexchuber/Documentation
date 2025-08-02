@@ -6,6 +6,7 @@ keywords: diving deeper, particles
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Particles

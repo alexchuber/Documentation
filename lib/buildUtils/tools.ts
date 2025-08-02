@@ -7,6 +7,7 @@ import { generateBreadcrumbs, getElementByIdArray } from "./content.utils";
 import { IDocumentationPageProps, IExampleLink } from "../content.interfaces";
 import { addSearchItem, addPlaygroundItem } from "./search.utils";
 import { addToSitemap } from "./sitemap.utils";
+import { addToLlms } from "./llms.utils";
 
 import puppeteer from "puppeteer";
 import { getExampleImageUrl, getExampleLink } from "../frontendUtils/frontendTools";
@@ -267,6 +268,7 @@ export async function getPageData(id: string[], fullPage?: boolean): Promise<IDo
         }
 
         addToSitemap(metadata.title, url, lastModified ? lastModified.toISOString() : "");
+        addToLlms(url, content, metadata);
 
         // generate images to examples. Offline only at the moment
         const matches = Array.from(content.matchAll(/(<(Playground|nme|nge|NME|NGE|NRGE|nrge|SFE|sfe).*id="([A-Za-z0-9#]*)".*\/>)/g));
@@ -364,3 +366,27 @@ export async function getPageData(id: string[], fullPage?: boolean): Promise<IDo
 
     return pageProps;
 }
+
+export async function smartFetch(url: string, options?: Object, retries: number = 3, retryDelay: number = 1) {
+    // TODO: Concurrency limit
+
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            if (i > 0) {
+                console.log(`Fetch succeeded for ${url} after ${i + 1} attempts`);
+            }
+            return response;
+        } catch (error) {
+            if (i < retries - 1) {
+                console.warn(`Fetch failed for ${url}, retrying... (${i + 1}/${retries})`);
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
+            }
+        }
+    }
+    
+    throw new Error(`Failed to fetch ${url} after ${retries} attempts`);
+};

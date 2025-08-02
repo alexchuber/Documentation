@@ -6,6 +6,7 @@ keywords: diving deeper, materials
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 Materials allow you to cover your meshes in color and texture. How a material appears depends on the light or lights used in the scene and how it is set to react.

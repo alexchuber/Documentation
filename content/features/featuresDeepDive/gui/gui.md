@@ -1,7 +1,7 @@
 ---
 title: The Babylon GUI
 image:
-description: Learn all about the Babylon.js 2D GUI system.
+description: Learn all about the Babylon.js 2D and 3D GUI system.
 keywords: diving deeper, GUI, 2D
 further-reading:
   - title: How To Use the Selection Panel Helper
@@ -14,6 +14,7 @@ further-reading:
     url: /features/featuresDeepDive/gui/gui3D
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Introduction

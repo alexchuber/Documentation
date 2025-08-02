@@ -20,6 +20,7 @@ further-reading:
       url: /setup/support/webGPU/webGPUOptimization/webGPUSnapshotRendering
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 The Babylon Viewer aims to simplify a specific but common Babylon.js use case: loading, viewing, and interacting with a 3D model.

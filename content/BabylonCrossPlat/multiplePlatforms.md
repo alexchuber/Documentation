@@ -6,6 +6,7 @@ keywords: diving deeper, cross-platform, platform
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 Babylon.js can be used to build experiences on many different platforms for

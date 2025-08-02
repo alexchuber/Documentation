@@ -23,4 +23,5 @@ export interface MarkdownMetadata {
     tocLevels?: number;
     videoContent?: Array<string | { title: string; url: string }>;
     furtherReading?: Array<string | { title: string; url: string }>;
+    llmstxtSection?: string;
 }

@@ -6,6 +6,7 @@ keywords: babylon.js, diving deeper, sprites
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 # Sprites

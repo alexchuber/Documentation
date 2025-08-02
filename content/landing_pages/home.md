@@ -6,6 +6,7 @@ keywords: welcome, babylon.js
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: none
 ---
 
 ## Welcome To The Babylon.js Documentation

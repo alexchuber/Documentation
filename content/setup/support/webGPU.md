@@ -6,6 +6,7 @@ keywords: babylon.js, advanced, WebGPU, support
 further-reading:
 video-overview:
 video-content:
+llmstxt-section: docs
 ---
 
 ## Introduction
