@@ -23,19 +23,67 @@ This loader supports both glTF 1.0 and 2.0 and will use the correct loader based
 <script src="babylon.glTFFileLoader.js"></script>
 ```
 
-## Loading files locally
+## Loading Codecs Locally
 
-By default, the glTF loader will request additional files for [draco compression](https://google.github.io/draco/) from _cdn.babylonjs.com_. In case you want to deliver these files locally (e.g. for GDPR compliance), you can set the [DracoDecoder.DefaultConfiguration](https://doc.babylonjs.com/typedoc/classes/BABYLON.DracoDecoder) object to use local files:
+If your glTF files use any of the following features, you'll need to take a few extra steps for production use.
+
+| Feature                               | glTF extension             | Babylon interface        |
+| ------------------------------------- | -------------------------- | ------------------------ |
+| Draco compression                     | KHR_mesh_draco_compression | DracoDecoder             |
+| Meshopt compression                   | EXT_meshopt_compression    | MeshoptCompression       |
+| .ktx2, or Basis Universal Compression | KHR_texture_basisu         | KhronosTextureContainer2 |
+
+<br/>
+These extensions require additional processing at load time to decompress the corresponding data. By default, Babylon will:
+
+- Download the required decoder files from the Babylon CDN.
+- Use web workers (if available) to execute the code.
+
+This behavior can lead to issues like GDPR compliance concerns or CSP violations, so we recommend hosting these resources yourself.
+
+How you do this depends on your setup. In general, there are two approaches:
+
+### Via URL Configuration
+
+This is the simplest approach, where you tell Babylon where to fetch and load the decoders from.
+
+1. Obtain the decoder files. You can either:
+   - Download them directly from the Babylon CDN https://cdn.babylonjs.com/\[FILENAME\], or
+   - (Draco only) Copy them from @babylonjs/core/assets/Draco/\[FILENAME\] during your build process.
+2. Host these files from your own app (for example, in a /public folder).
+3. Configure the URLs so Babylon loads them from your server instead of the CDN.
+
+See below for example configurations and the various URLs a codec may use.
 
 ```typescript
 DracoDecoder.DefaultConfiguration = {
-  wasmUrl: "/babylon-draco-files/draco_wasm_wrapper_gltf.js",
-  wasmBinaryUrl: "/babylon-draco-files/draco_decoder_gltf.wasm",
-  fallbackUrl: "/babylon-draco-files/draco_decoder_gltf.js",
+  wasmUrl: localPath + "/draco_wasm_wrapper_gltf.js",
+  wasmBinaryUrl: localPath + "/draco_decoder_gltf.wasm",
+  fallbackUrl: localPath + "/draco_decoder_gltf.js",
+};
+
+MeshoptCompression.Configuration.decoder = {
+  url: localPath + "/meshopt_decoder.js",
+};
+
+KhronosTextureContainer2.URLConfig = {
+  jsDecoderModule: localPath + "/babylon.ktx2Decoder.js",
+  wasmUASTCToASTC: localPath + "/ktx2Transcoders/1/uastc_astc.wasm",
+  wasmUASTCToBC7: localPath + "/ktx2Transcoders/1/uastc_bc7.wasm",
+  wasmUASTCToRGBA_UNORM: localPath + "/ktx2Transcoders/1/uastc_rgba8_unorm_v2.wasm",
+  wasmUASTCToRGBA_SRGB: localPath + "/ktx2Transcoders/1/uastc_rgba8_srgb_v2.wasm",
+  jsMSCTranscoder: localPath + "/ktx2Transcoders/1/msc_basis_transcoder.js",
+  wasmMSCTranscoder: localPath + "/ktx2Transcoders/1/msc_basis_transcoder.wasm",
+  wasmZSTDDecoder: localPath + "/zstddec.wasm",
 };
 ```
 
-Be sure to download the files first (from `https://cdn.babylonjs.com/[FILENAME]`) and put them in a local path (`public/babylon-draco-files`, in this case).
+### Via Resource Injection
+
+Alternatively, you can inject the decoder modules directly (or workers preloaded with them) instead of relying on Babylon to fetch them.
+Follow the steps described in the [ESM/NPM Support docs](https://doc.babylonjs.com/setup/frameworkPackages/es6Support/#ktx2-decoder-packages) to set this up with the KTX2 and Draco decoders.
+
+_Note: Meshopt compression does not yet support injection._
 
 ## Warning
 
