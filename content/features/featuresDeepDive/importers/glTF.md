@@ -18,9 +18,9 @@ The .glTF File Loader Plugin works in conjunction with Babylon's scene loader fu
 
 The recommended way to use the .glTF file loader plugin is via the `@babylonjs/loaders` ES6 NPM package. Please read [Loading Any File Type](/features/featuresDeepDive/importers/loadingFileTypes#npm) for more information about installing and using the loader package in your own build.
 
-<Alert severity="warning" title="Warning" description="The CDN should not be used in production environments. The purpose of our CDN is to serve Babylon packages to users learning how to use the platform or running small experiments. Once you've built an application and are ready to share it with the world at large, you should serve all packages from your own CDN."/>
+But for testing purposes, the following compiled JS files are offered on the public CDN, at `https://preview.babylonjs.com/loaders/`:
 
-But for testing purposes, the following compiled JS files are offered on the public CDN, at https://preview.babylonjs.com/loaders/:
+<Alert severity="warning" title="Warning" description="The CDN should not be used in production environments. The purpose of our CDN is to serve Babylon packages to users learning how to use the platform or running small experiments. Once you've built an application and are ready to share it with the world at large, you should serve all packages from your own CDN."/>
 
 - `babylon.glTF2FileLoader.js` - Only glTF 2.0
 - `babylon.glTF1FileLoader.js` - Only glTF 1.0
