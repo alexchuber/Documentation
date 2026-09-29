@@ -2664,6 +2664,11 @@
                             "friendlyName": "Screen Readers",
                             "children": {},
                             "content": "toolsAndResources/accessibility/screenReaders"
+                        },
+                        "babylonLite": {
+                            "friendlyName": "Babylon Lite",
+                            "children": {},
+                            "content": "toolsAndResources/accessibility/babylonLite"
                         }
                     },
                     "content": "toolsAndResources/accessibility"
