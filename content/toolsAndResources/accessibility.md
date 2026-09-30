@@ -10,7 +10,4 @@ video-content:
 
 Babylon.js and Babylon Lite applications render visual content inside a canvas. A screen reader cannot discover meaningful scene objects unless the application also exposes them through HTML.
 
-Choose the guide that matches your engine:
-
-- [Support screen readers and keyboard navigation in Babylon.js](/toolsAndResources/accessibility/screenReaders) with accessibility tags and `HTMLTwinRenderer`.
-- [Describe Babylon Lite scenes for screen readers](/toolsAndResources/accessibility/babylonLite) with accessibility tags and a passive semantic HTML representation.
+[Accessibility in Babylon Lite](/toolsAndResources/accessibility/babylonLite) describes how to expose scene object metadata as semantic HTML.

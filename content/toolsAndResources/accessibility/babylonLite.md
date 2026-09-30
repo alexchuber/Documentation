@@ -10,7 +10,7 @@ video-content:
 
 # Accessibility in Babylon Lite
 
-Babylon Lite can expose meaningful scene objects as passive HTML that screen readers can read. Add accessibility metadata to existing objects, then mount one HTML representation for the scene.
+Babylon Lite can expose meaningful scene objects as semantic HTML that screen readers can read. Add accessibility metadata to existing objects, then mount one HTML representation for the scene.
 
 <Alert severity="warning" title="Development feature">
 
@@ -67,7 +67,7 @@ Use `getAccessibilityTag` if an update must keep fields from the current tag. Pa
 
 Use `hidden: true` to hide a semantic subtree. Do not hide an object only because the camera clips it or another mesh covers it.
 
-If a tag supplies both `hidden` and `aria-hidden`, the values must agree. Use `disabled: true` or `aria-disabled` to report an unavailable state. Neither value adds control behavior.
+If a tag supplies both `hidden` and `aria-hidden`, the values must agree. Use `disabled: true` or `aria-disabled` to report an unavailable state.
 
 The scene binding observes normal additions, removals, hierarchy changes, metadata changes, visibility changes, and disposal. After direct edits to scene arrays, call `updateSceneAccessibility(accessibilityTwin.accessibility)`.
 
@@ -77,15 +77,9 @@ The HTML twin follows the scene hierarchy by default. Use `setAccessibilityParen
 
 Create the scene twin before populating the scene when possible. If the scene does not retain an empty transform root, pass that root through the `roots` option.
 
-## Check the scope and reading experience
+## Test descriptions with a screen reader
 
-The Babylon Lite accessibility APIs provide descriptive semantics, not interaction:
-
-- The generated elements are not focusable and add no click, pointer, keyboard, focus, or blur listeners.
-- Roles and ARIA metadata do not add widget behavior or make a scene object operable.
-- The HTML twin exposes only authored information. It does not inspect rendered pixels or track every visual property.
-- Metadata and logical trees work without a browser document. The HTML twin requires a browser document.
-- The APIs are building blocks, not a WCAG conformance guarantee.
+The HTML twin exposes authored names, descriptions, roles, states, and hierarchy. It does not inspect rendered pixels or track every visual property. Metadata and logical trees work without a browser document; the HTML twin requires one. These APIs support an accessibility implementation but do not guarantee WCAG conformance.
 
 Test with the browsers and screen readers that your application supports. Confirm:
 
@@ -95,5 +89,3 @@ Test with the browsers and screen readers that your application supports. Confir
 - No descriptions for decorative, hidden, or removed objects.
 
 Automated accessibility-tree tests provide engineering evidence, but they do not replace testing with users or certify WCAG conformance.
-
-For interactive accessibility features in the class-based engine, read [Accessibility Scene Tree for Screen Readers](/toolsAndResources/accessibility/screenReaders).
