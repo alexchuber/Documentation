@@ -10,20 +10,22 @@ video-content:
 
 # Accessibility in Babylon Lite
 
-Babylon Lite can expose meaningful scene objects as semantic HTML that screen readers can read. Add accessibility metadata to existing objects, then mount one HTML representation for the scene.
+Describe meaningful scene objects with accessibility metadata, then create an HTML twin for the scene. An HTML twin is a generated, visually hidden HTML copy of your descriptions, not a copy of the rendered scene.
+
+You can add names, descriptions, roles, and ARIA attributes. ARIA (Accessible Rich Internet Applications) adds names, roles, and states that assistive technologies can read from HTML.
 
 <Alert severity="warning" title="Development feature">
 
-These APIs require the development build from [Babylon Lite accessibility PR alexchuber/Babylon-Lite#2](https://github.com/alexchuber/Babylon-Lite/pull/2). They are not part of a published `@babylonjs/lite` version at the time of writing. Do not copy a version number from this page.
+Use the development build from [Babylon Lite accessibility PR alexchuber/Babylon-Lite#2](https://github.com/alexchuber/Babylon-Lite/pull/2). No published `@babylonjs/lite` version includes these APIs yet.
 
 </Alert>
 
-## Describe a scene
+## Describe an object
 
-Assume that your application already has a `scene`, its `canvas`, and a `satellite` scene node. Describe the node, create a host beside the canvas, and mount the scene HTML twin:
+Assume that your application already has a `scene`, its `canvas`, and a `satellite` scene node. Add a tag to the node, create an HTML container beside the canvas, and create one HTML twin for the scene:
 
 ```typescript
-import { createSceneHtmlTwin, disposeSceneHtmlTwin, setAccessibilityTag } from "@babylonjs/lite";
+import { createSceneHtmlTwin, disposeSceneHtmlTwin, setAccessibilityTag, updateSceneAccessibility } from "@babylonjs/lite";
 
 setAccessibilityTag(satellite, {
   name: "Communications satellite",
@@ -47,45 +49,75 @@ function disposeAccessibility(): void {
 }
 ```
 
-Metadata alone does not reach a screen reader. `createSceneHtmlTwin` turns the authored metadata into a visually hidden HTML region. It does not draw text in the 3D scene.
+`createSceneHtmlTwin` adds a labeled, visually hidden HTML region inside `accessibilityHost`. The `label` names that region for screen reader users. The function does not draw text in the 3D scene.
 
-Tag only objects that help the user understand the scene. Leave decorative meshes untagged. An untagged transform does not hide tagged descendants.
+Tag objects that help a user understand the scene. Leave decorative meshes untagged. A tagged child still appears when its parent has no tag.
 
-## Update or remove metadata
+Call `disposeAccessibility()` when the viewer closes. It removes the generated HTML, disconnects scene updates, clears the satellite tag, and removes the container.
 
-`setAccessibilityTag` copies and freezes each tag and its ARIA values. Replace the tag when the description or state changes. Mutating the original object does not update the HTML twin.
+## Update a description
+
+`setAccessibilityTag` stores a read-only copy of the tag and its ARIA values. Later edits to your original tag object or its `aria` object do not affect the HTML twin. Call `setAccessibilityTag` again with the new values.
+
+For example, assume that `connectionStatus` is an existing scene node. This function updates its description from the current `connected` value:
 
 ```typescript
-setAccessibilityTag(connectionStatus, {
-  name: connected ? "Satellite connection is stable" : "Satellite connection is unavailable",
-  role: "status",
-  aria: { "aria-live": "polite" },
-});
+function updateConnectionStatus(connected: boolean): void {
+  setAccessibilityTag(connectionStatus, {
+    name: connected ? "Satellite connection is stable" : "Satellite connection is unavailable",
+    role: "status",
+    aria: { "aria-live": "polite" },
+  });
+}
 ```
 
-Use `getAccessibilityTag` if an update must keep fields from the current tag. Pass `null` to remove an object's generated description; tagged descendants remain available. To remove one ARIA attribute while keeping the tag, omit the key from the replacement map or set its value to `null`.
+`getAccessibilityTag` returns the current read-only tag, or `null` when the object has no tag. Use the returned values to build a replacement tag instead of trying to edit them.
 
-Use `hidden: true` to hide a semantic subtree. Do not hide an object only because the camera clips it or another mesh covers it.
+## Remove or hide a description
+
+Pass `null` to `setAccessibilityTag` to remove an object's generated description. Tagged children remain available:
+
+```typescript
+setAccessibilityTag(satellite, null);
+```
+
+To remove one ARIA attribute but keep the tag, omit that attribute from the replacement `aria` object or set its value to `null`.
+
+Use `hidden: true` to hide an object and all its children from the generated HTML. Use this state when those descriptions should not be exposed. Do not hide an object only because the camera clips it or another mesh covers it.
 
 If a tag supplies both `hidden` and `aria-hidden`, the values must agree. Use `disabled: true` or `aria-disabled` to report an unavailable state.
 
-The scene binding observes normal additions, removals, hierarchy changes, metadata changes, visibility changes, and disposal. After direct edits to scene arrays, call `updateSceneAccessibility(accessibilityTwin.accessibility)`.
+The HTML twin watches normal object additions, removals, parent changes, tag changes, visibility changes, and disposal. If you edit `scene.meshes` or `scene.lights` directly, synchronize the HTML yourself:
 
-## Control grouping and roots
+```typescript
+updateSceneAccessibility(accessibilityTwin.accessibility);
+```
 
-The HTML twin follows the scene hierarchy by default. Use `setAccessibilityParent` when the semantic grouping should differ from the transform hierarchy. Both objects must belong to the same scene accessibility binding.
+## Change the description hierarchy
 
-Create the scene twin before populating the scene when possible. If the scene does not retain an empty transform root, pass that root through the `roots` option.
+The generated HTML follows the scene's parent-child hierarchy by default. Use `setAccessibilityParent` when descriptions need different grouping or reading order. This function changes only the generated description hierarchy, not the scene transforms.
 
-## Test descriptions with a screen reader
+Both objects must be part of the same scene HTML twin. Pass `undefined` as the parent to restore the scene hierarchy.
 
-The HTML twin exposes authored names, descriptions, roles, states, and hierarchy. It does not inspect rendered pixels or track every visual property. Metadata and logical trees work without a browser document; the HTML twin requires one. These APIs support an accessibility implementation but do not guarantee WCAG conformance.
+Create the HTML twin before you add objects to the scene when possible. If an empty transform node serves only as a description group, the scene might not retain it. Include that node in the `roots` option when you create the twin:
 
-Test with the browsers and screen readers that your application supports. Confirm:
+```typescript
+const accessibilityTwin = createSceneHtmlTwin(scene, {
+  parent: accessibilityHost,
+  label: "Satellite viewer",
+  roots: [descriptionGroup],
+});
+```
 
-- Each meaningful object's name, description, role, and ARIA state.
-- The intended grouping and reading order.
-- Updated text and live status when scene state changes.
-- No descriptions for decorative, hidden, or removed objects.
+## Test the result
 
-Automated accessibility-tree tests provide engineering evidence, but they do not replace testing with users or certify WCAG conformance.
+The HTML twin uses the metadata that you provide. It does not inspect rendered pixels or infer descriptions from visual properties. You can create and test the metadata without a browser document, but creating the HTML twin requires one.
+
+Test with each browser and screen reader that your application supports. These APIs can support an accessible experience, but using them does not by itself establish WCAG conformance.
+
+Check that:
+
+- Each meaningful object has the intended name, description, role, and ARIA state.
+- Objects appear in the intended groups and reading order.
+- Text and `aria-live` status stay current when scene state changes.
+- Decorative, hidden, and removed objects do not appear.
