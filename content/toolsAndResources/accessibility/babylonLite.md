@@ -96,6 +96,4 @@ Test with the browsers and screen readers that your application supports. Confir
 
 Automated accessibility-tree tests provide engineering evidence, but they do not replace testing with users or certify WCAG conformance.
 
-Applications that use the Babylon.js-shaped compatibility API can keep `Node.accessibilityTag` and `HTMLTwinRenderer` from `@babylonjs/lite-compat`. The compatibility renderer creates the same passive HTML representation and does not dispatch `ActionManager` triggers.
-
 For interactive accessibility features in the class-based engine, read [Accessibility Scene Tree for Screen Readers](/toolsAndResources/accessibility/screenReaders).
